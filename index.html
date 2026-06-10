@@ -80,7 +80,7 @@ html,body{background:var(--bg);color:#ffffff;font-family:-apple-system,'SF Pro T
 .s-section{padding:0 18px;margin-top:20px;}
 
 /* SECTOR BLOCK */
-.sector-block{margin-bottom:44px;}
+.sector-block{margin-bottom:36px;}
 .sector-block-header{display:flex;align-items:center;justify-content:center;padding:10px 4px;cursor:pointer;transition:opacity .15s;}
 .sector-block-header:active{opacity:.6;}
 .sbn{font-size:19px;color:#ffffff;font-weight:400;}
@@ -733,11 +733,11 @@ function _renderSettingsNow(){
   for(const sec of state.sectors){
     html+=_renderSector(sec, _habitsBySector[sec.id]||[]);
   }
-  if(state.sectors.length<5) html+=`<button class="add-sector-btn-icon" onclick="addSector()">${plusSVG}</button>`;
+  if(state.sectors.length<5) html+=`<button class="add-sector-btn-icon" style="margin-top:36px" onclick="addSector()">${plusSVG}</button>`;
   html+=`</div>`;
 
   const _curBg=state.bg||'#162E1A';
-  html+=`<div style="display:flex;align-items:center;justify-content:center;gap:52px;padding:32px 0 16px;">
+  html+=`<div style="display:flex;align-items:center;justify-content:center;gap:52px;padding:36px 0 36px;">
     <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;">
       <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
