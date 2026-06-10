@@ -684,7 +684,7 @@ function _renderCalendar(byS){
         if(habit.days.includes(d)){
           let span=1;
           while(d+span<7&&habit.days.includes(d+span)) span++;
-          h+=`<div style="grid-column:span ${span};padding:2px 2px;box-sizing:border-box"><div onclick="openHabitDetail('${habit.id}')" style="background:rgba(255,255,255,0.32);border-radius:var(--radius);padding:14px 4px;font-size:${span===1?'15px':'18px'};color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:${span===1?'1.2':'1.35'};cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;text-align:center;height:47px;box-sizing:border-box;display:flex;align-items:center;justify-content:center">${habit.name}</div></div>`;
+          h+=`<div style="grid-column:span ${span};padding:2px 2px;box-sizing:border-box"><div onclick="openHabitDetail('${habit.id}')" style="background:rgba(255,255,255,0.32);border-radius:var(--radius);padding:14px ${span===1?'6px':'4px'};font-size:${span===1?'15px':'18px'};color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:${span===1?'1.2':'1.35'};cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;text-align:${span===1?'left':'center'};height:47px;box-sizing:border-box;display:flex;align-items:center;justify-content:${span===1?'flex-start':'center'}">${habit.name}</div></div>`;
           d+=span;
         } else { h+=`<div style="height:47px"></div>`; d++; }
       }
