@@ -38,14 +38,14 @@ html,body{background:var(--bg);color:#ffffff;font-family:-apple-system,'SF Pro T
 /* TEMPS TRAY */
 
 /* HABIT TILE */
-.habit-row{display:flex;align-items:center;gap:16px;padding:18px 26px 18px 28px;margin-bottom:10px;background:rgba(255,255,255,0.32);border:none;border-radius:var(--radius);cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);touch-action:auto;}
+.habit-row{display:flex;align-items:center;gap:16px;padding:20px 26px 20px 28px;margin-bottom:14px;background:rgba(255,255,255,0.32);border:none;border-radius:var(--radius);cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);touch-action:auto;}
 
 .habit-row.row-enter,.habit-row.row-visible{opacity:1;transform:none;}
 .habit-row:active{opacity:.55;}
 .habit-row.dimmed{opacity:.22;transition:opacity .4s ease;}
 .habit-row.vanishing{overflow:hidden;pointer-events:none;box-shadow:none!important;}
 .habit-row.temp-row .habit-name{color:rgba(120,235,120,1);font-weight:500;}
-.habit-name{font-size:21px;font-weight:400;color:#ffffff;letter-spacing:-.02em;flex:1;user-select:none;text-align:center;}
+.habit-name{font-size:23px;font-weight:400;color:#ffffff;letter-spacing:-.02em;flex:1;user-select:none;text-align:center;}
 
 /* HABIT GROUPS SEPARATOR */
 
@@ -238,7 +238,7 @@ let state;
 try{ const r=localStorage.getItem('hs9'); state=r?migrateState(JSON.parse(r)):defaultState(); }catch{ state=defaultState(); }
 
 // ── IN-MEMORY UI STATE (never persisted) ──
-let _uiSettingsOpen=false;
+let _uiSettingsOpen=true;
 
 // ══════════════════════════════════════════════════════
 // NAWIGACJA — jedyny punkt przełączania ekranów
@@ -577,15 +577,21 @@ function applyBgColor(v,persist){
   if(persist){ state.bg=v; save(); renderSettings(); }
 }
 function copyHabits(){
+  const DAY_LETTERS=['P','W','Ś','C','P','S','N'];
+  const today=jsDay(); // 0=Mon…6=Sun
+  const dayLetter=DAY_LETTERS[today];
   const lines = [];
   state.sectors.forEach(sec => {
     const habits = state.habits.filter(h => h.sectorId === sec.id);
     if(!habits.length) return;
+    lines.push(`[${sec.name}]`);
     habits.forEach(h => {
-      lines.push(h.name);
+      lines.push(`${dayLetter} ${h.name}`);
     });
+    lines.push('');
   });
   const text = lines.join('\n').trim();
+
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.querySelector('[onclick="copyHabits()"] div');
     if(btn){ const orig = btn.innerHTML; btn.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'; setTimeout(()=>{ btn.innerHTML=orig; },1800); }
@@ -719,14 +725,7 @@ function _renderSettingsNow(){
       .map(({h})=>h);
   }
 
-  html+=_renderCalendar(_habitsBySector);
-
-  // ── GEAR ICON — toggles sectors/settings below ──
-  html+=`<div onclick="toggleFold('settings')" style="display:flex;align-items:center;justify-content:center;padding:80px 20px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:${settingsOpen?'#fff':'rgba(255,255,255,0.35)'}"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-  </div>`;
-
-  if(settingsOpen){
+  html+=`<div style="height:max(env(safe-area-inset-top,44px),44px)"></div>`;
 
   // SECTORS
   html+=`<div class="s-section">`;
@@ -750,8 +749,6 @@ function _renderSettingsNow(){
       </div>
       </button>
   </div>`;
-
-  } // end settingsOpen
 
   html+=`<div style="height:60px"></div>`;
   // Only update DOM if content changed (avoids unnecessary reflows)
